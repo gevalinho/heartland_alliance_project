@@ -38,3 +38,5 @@ next-env.d.ts
 .env
 # storybook
 /storybook-static
+
+C:UsersgevalAppDataRoamingnpm-cache/
