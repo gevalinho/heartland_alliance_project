@@ -7,28 +7,33 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model Patient {
-  id                String    @id @default(cuid())
-  name              String
-  phoneNumber       String
-  medicationName    String
-  dosageSchedule    String
-  lastCallTime      DateTime?
-  nextCallTime      DateTime?
-  adherenceScore    Float     @default(0)
-  calls             Call[]
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+model User {
+  id               Int                @id @default(autoincrement())
+  name             String
+  email            String             @unique
+  password         String
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  CallLog          CallLog[]
+  MedicationRecord MedicationRecord[]
 }
 
-model Call {
-  id           String    @id @default(cuid())
-  patientId    String
-  patient      Patient   @relation(fields: [patientId], references: [id])
-  status       String    @default("pending") // pending, completed, failed
-  duration     Int?      @default(0)
-  recordingUrl String?
-  notes        String?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+model CallLog {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  phoneNumber String
+  callStatus  String // success, failed, or unanswered
+  duration    Int? // in seconds
+  timestamp   DateTime @default(now())
+  notes       String?
+  User        User     @relation(fields: [userId], references: [id])
+}
+
+model MedicationRecord {
+  id             Int      @id @default(autoincrement())
+  userId         Int
+  medicationName String
+  refillDate     DateTime
+  adherenceRate  Float // percentage
+  User           User     @relation(fields: [userId], references: [id])
 }
