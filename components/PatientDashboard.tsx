@@ -45,11 +45,11 @@ export function PatientDashboard() {
           patientId,
         }),
       });
-      
+
       if (!response.ok) {
         throw new Error("Failed to initiate call");
       }
-      
+
       // Refresh the patient list after initiating the call
       fetchPatients();
     } catch (error) {
